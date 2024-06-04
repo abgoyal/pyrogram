@@ -29,6 +29,7 @@ async def get_chunk(
     chat_id: Union[int, str],
     limit: int = 0,
     offset: int = 0,
+    min_id: int = 0,
     from_message_id: int = 0,
     from_date: datetime = utils.zero_datetime()
 ):
@@ -40,7 +41,7 @@ async def get_chunk(
             add_offset=offset,
             limit=limit,
             max_id=0,
-            min_id=0,
+            min_id=min_id,
             hash=0
         ),
         sleep_threshold=60
@@ -56,6 +57,7 @@ class GetChatHistory:
         limit: int = 0,
         offset: int = 0,
         offset_id: int = 0,
+        min_id: int = 0,
         offset_date: datetime = utils.zero_datetime()
     ) -> Optional[AsyncGenerator["types.Message", None]]:
         """Get messages from a chat history.
@@ -81,6 +83,9 @@ class GetChatHistory:
             offset_id (``int``, *optional*):
                 Identifier of the first message to be returned.
 
+            min_id (``int``, *optional*):
+                Only return messages with message.id strictly greater than min_id.
+
             offset_date (:py:obj:`~datetime.datetime`, *optional*):
                 Pass a date as offset to retrieve only older messages starting from that date.
 
@@ -103,6 +108,7 @@ class GetChatHistory:
                 chat_id=chat_id,
                 limit=limit,
                 offset=offset,
+                min_id=min_id,
                 from_message_id=offset_id,
                 from_date=offset_date
             )
